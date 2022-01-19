@@ -47,6 +47,12 @@ import '@/assets/less/JAreaLinkage.less'
 import VueAreaLinkage from 'vue-area-linkage'
 import '@/components/jeecg/JVxeTable/install'
 import '@/components/JVxeCells/install'
+// import BaiduMap from 'vue-baidu-map'
+
+// Vue.use(BaiduMap, {
+//   ak: '2GlUhNFAKn4hBkQBkM39G303SE9XFDTc'
+// })
+
 //表单验证
 import { rules } from '@/utils/rules'
 Vue.prototype.rules = rules
