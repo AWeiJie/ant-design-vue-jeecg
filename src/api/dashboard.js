@@ -19,3 +19,11 @@ export function getStatisticalData(params) {
   })
 }
 
+// 获取工程详细信息
+export function getProjectInfo(params) {
+  return axios({
+    url: '/assets/getProjectInfo',
+    method: 'get',
+    params
+  })
+}

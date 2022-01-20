@@ -3,7 +3,7 @@
     <div class="box-left">
       <div class="current-num">
         <div class="title">// 工程建设资金总投入 //</div>
-        <p>443461574.25</p>
+        <p>{{ invest }}</p>
       </div>
       <div class="proportion">
         <div class="title">各工程价格占总投入比例</div>
@@ -12,10 +12,10 @@
       <div class="proportion">
         <div class="title">
           工程现状图
-          <p class="select"><img src="../../assets/select_icon.png" alt="" /> 筛选</p>
+          <!-- <p class="select"><img src="../../assets/select_icon.png" alt="" /> 筛选</p> -->
         </div>
-        <div class="filter-wrap">
-          <!-- <a-select default-value="lucy">
+        <!-- <div class="filter-wrap">
+          <a-select default-value="lucy">
             <a-select-option value="jack">
               Jack
             </a-select-option>
@@ -28,11 +28,11 @@
             <a-select-option value="Yiminghe">
               yiminghe
             </a-select-option>
-          </a-select> -->
+          </a-select>
           <a-button type="primary">
             搜索
           </a-button>
-        </div>
+        </div> -->
         <div class="img-wrap">
           <template>
             <img src="http://47.104.223.189:8080/jeecg-boot/assetsPicture/12-1.png" :preview="0" />
@@ -67,12 +67,12 @@
           </div>
         </div>
         <div class="filter-wrap">
-          <a-select default-value="lucy">
+          <a-select default-value="lucy" @change="handleChange">
             <a-select-option :value="item.id" v-for="item in selectList" :key="item.id">
               {{ item.projectName }}
             </a-select-option>
           </a-select>
-          <a-button type="primary">
+          <a-button type="primary" @click="feactProjectInfo">
             搜索
           </a-button>
         </div>
@@ -84,45 +84,37 @@
 
     <div class="box-right">
       <div class="proportion">
-        <div class="title">各工程基础设备数量</div>
+        <div class="title">基础设备数量</div>
         <div id="bar" class="echart"></div>
       </div>
 
       <div class="proportion">
-        <div class="title">工程相关信息</div>
-        <!-- <a-descriptions bordered title="Custom Size" :size="size">
-          <a-descriptions-item label="Product">
-            Cloud Database
-          </a-descriptions-item>
-          <a-descriptions-item label="Billing">
-            Prepaid
-          </a-descriptions-item>
-          <a-descriptions-item label="Time">
-            18:00:00
-          </a-descriptions-item>
-          <a-descriptions-item label="Amount">
-            $80.00
-          </a-descriptions-item>
-          <a-descriptions-item label="Discount">
-            $20.00
-          </a-descriptions-item>
-          <a-descriptions-item label="Official">
-            $60.00
-          </a-descriptions-item>
-          <a-descriptions-item label="Config Info">
-            Data disk type: MongoDB
-            <br />
-            Database version: 3.4
-            <br />
-            Package: dds.mongo.mid
-            <br />
-            Storage space: 10 GB
-            <br />
-            Replication factor: 3
-            <br />
-            Region: East China 1<br />
-          </a-descriptions-item>
-        </a-descriptions> -->
+        <div class="title">相关信息</div>
+        <div class="table-wrap">
+          <a-descriptions bordered :column="1" size="middle">
+            <a-descriptions-item label="名称">
+              {{ projectInfo.projectName }}
+            </a-descriptions-item>
+            <a-descriptions-item label="经纬度">
+              {{ projectInfo.latitudeAndLongitude }}
+            </a-descriptions-item>
+            <a-descriptions-item label="关键设施">
+              {{ projectInfo.criticalInfrastructure }}
+            </a-descriptions-item>
+            <a-descriptions-item label="建设成本">
+              {{ projectInfo.constructionCosts }}
+            </a-descriptions-item>
+            <a-descriptions-item label="设计标准">
+              {{ projectInfo.designCriteria }}
+            </a-descriptions-item>
+            <a-descriptions-item label="预期使用寿命">
+              {{ projectInfo.expectedServiceLife }}
+            </a-descriptions-item>
+            <a-descriptions-item label="已使用寿命">
+              {{ projectInfo.alreadyServiceLife }}
+            </a-descriptions-item>
+          </a-descriptions>
+        </div>
       </div>
     </div>
   </div>
@@ -130,7 +122,7 @@
 
 <script>
 import * as echarts from 'echarts'
-import { getProjectList, getStatisticalData } from '@/api/dashboard'
+import { getProjectList, getStatisticalData, getProjectInfo } from '@/api/dashboard'
 
 export default {
   name: 'Analysis',
@@ -139,7 +131,9 @@ export default {
     return {
       selectList: [], // 筛选列表
       statisticalData: [], // 工程饼状图与工程基础设施柱状图
-      indexStyle: 1
+      projectInfo: {}, // 工程信息
+      projectId: null,
+      invest: 443461574.25
     }
   },
 
@@ -147,6 +141,7 @@ export default {
     // 初始化饼图
     initPieEchart(data) {
       const myChart = echarts.init(document.getElementById('pie'))
+      const invest = this.invest
       const pieData = []
       data.map(item => {
         pieData.push({ value: item.constructionCosts, name: item.projectName })
@@ -154,7 +149,20 @@ export default {
       // 绘制图表
       myChart.setOption({
         tooltip: {
-          trigger: 'item'
+          trigger: 'item',
+          position: 'right',
+          formatter: function(params) {
+            let engineering = {}
+            data.map(item => {
+              if (item.projectName == params.name) {
+                engineering = item
+              }
+            })
+
+            return `工程名称：${params.name}<br>
+            投入资金：${engineering.constructionCosts}<br>
+            投入资金占总投入比：${((engineering.constructionCosts / invest) * 100).toFixed(2)}%`
+          }
         },
         legend: {
           icon: 'circle',
@@ -172,12 +180,11 @@ export default {
           pageIconSize: 11, //翻页按钮大小
           pageFormatter: ' ', //隐藏翻页的数字
           formatter: function(name) {
-            return name.length > 5 ? name.slice(0, 5) + '...' : name
+            return name.length > 8 ? name.slice(0, 8) + '...' : name
           }
         },
         series: [
           {
-            name: 'Access From',
             type: 'pie',
             radius: ['30%', '50%'],
             center: ['30%', '50%'], //这个属性调整图像的位置
@@ -206,12 +213,15 @@ export default {
       // 绘制图表
       barChart.setOption({
         tooltip: {},
+        grid: {
+          top: '5%'
+        },
         xAxis: {
           type: 'category',
           data: categoryList,
           axisLabel: {
             interval: 0,
-            rotate: 40
+            rotate: 60
           }
         },
         yAxis: {
@@ -225,12 +235,33 @@ export default {
             data: barData,
             type: 'bar',
             showBackground: true,
+            itemStyle: {
+              normal: {
+                barBorderRadius: [20, 20, 0, 0]
+              }
+            },
             backgroundStyle: {
               color: 'rgba(180, 180, 180, 0.2)'
             }
           }
         ]
       })
+    },
+
+    // 获取工程详情
+    feactProjectInfo() {
+      getProjectInfo({
+        id: this.projectId
+      }).then(res => {
+        if (res.code === 200) {
+          this.projectInfo = res.result
+        }
+      })
+    },
+
+    // 切换工程
+    handleChange(id) {
+      this.projectId = id
     }
   },
 
@@ -263,8 +294,19 @@ export default {
       style: purpleStyle
     })
 
+
+// 创建小车图标
+var myIcon = new BMapGL.Icon("../../assets/dam.svg", new BMapGL.Size(52, 26));
+// 创建Marker标注，使用小车图标
+// var pt = new BMapGL.Point(116.417, 39.909);
+// var marker = new BMapGL.Marker(pt, {
+//     icon: myIcon
+// });
+// // 将标注添加到地图
+// map.addOverlay(marker);
+
     // 创建点标记
-    var marker1 = new BMapGL.Marker(new BMapGL.Point(108.706808, 34.374272))
+    var marker1 = new BMapGL.Marker(new BMapGL.Point(108.706808, 34.374272),{icon: myIcon})
 
     // 在地图上添加点标记
     map.addOverlay(marker1)
@@ -289,12 +331,13 @@ export default {
 <style lang="less" scoped>
 .analysis-view {
   display: flex;
-  height: calc(100vh - 111px);
+  min-height: calc(100vh - 111px);
+  min-width: 1280px;
   background: url('../../assets/analysis_bg.png') left top no-repeat;
   background-size: 100% 100%;
 
   .box-left {
-    flex: 0 0 500px;
+    flex: 0 0 400px;
     padding: 10px;
 
     .current-num {
@@ -364,8 +407,9 @@ export default {
 
       .img-wrap {
         width: 100%;
-        height: 235px;
+        height: 255px;
         overflow: hidden;
+        margin-top: 10px;
 
         img {
           width: 100%;
@@ -464,15 +508,20 @@ export default {
 
     .map-wrap {
       height: 500px;
+      padding: 10px;
 
       .map {
         height: 500px;
+      }
+
+      /deep/.anchorBL {
+        display: none;
       }
     }
   }
 
   .box-right {
-    flex: 0 0 500px;
+    flex: 0 0 400px;
 
     .proportion {
       padding: 10px;
@@ -487,8 +536,26 @@ export default {
       }
 
       .echart {
-        height: 300px;
+        height: 400px;
         width: 100%;
+      }
+
+      .table-wrap {
+        padding: 10px;
+        width: 400px;
+        box-sizing: border-box;
+
+        /deep/.ant-descriptions {
+          .ant-descriptions-item-label {
+            background-color: #143653;
+            color: #fff;
+            width: 136px;
+          }
+
+          .ant-descriptions-item-content {
+            color: #fff;
+          }
+        }
       }
     }
   }
