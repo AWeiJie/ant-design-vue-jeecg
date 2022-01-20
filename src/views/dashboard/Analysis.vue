@@ -151,32 +151,35 @@ export default {
       ]
     })
 
-    
-
     // 初始化地图
-    // var map = initMap({
-    //   tilt: 50,
-    //   heading: 0,
-    //   center: [108.706808, 34.374272],
-    //   zoom: 13,
-    //   style: purpleStyle
-    // })
+    var map = initMap({
+      tilt: 50,
+      heading: 0,
+      center: [108.706808, 34.374272],
+      zoom: 13,
+      style: purpleStyle
+    })
 
-    // var view = new mapvgl.View({
-    //   map: map
-    // })
+    // 创建点标记
+    var marker1 = new BMapGL.Marker(new BMapGL.Point(108.706808, 34.374272))
 
-    // view.startAnimation()
+    // 在地图上添加点标记
+    map.addOverlay(marker1)
 
+    var view = new mapvgl.View({
+      map: map
+    })
 
-    // var lineLayer = new mapvgl.LineTripLayer({
-    //   trailLength: 21,
-    //   color: 'rgb(0, 255, 255)'
-    // })
-    // view.addLayer(lineLayer)
-    // const data = []
-    // lineLayer.setData(data)
-  
+    view.startAnimation()
+    //     console.log(BMap)
+
+    var lineLayer = new mapvgl.LineTripLayer({
+      trailLength: 21,
+      color: 'rgb(0, 255, 255)'
+    })
+    view.addLayer(lineLayer)
+    const data = []
+    lineLayer.setData(data)
 
     // test()
     //   .then(function(rs) {
