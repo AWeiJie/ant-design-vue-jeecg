@@ -3,7 +3,7 @@
     <div class="box-left">
       <div class="current-num">
         <div class="title">// 工程建设资金总投入 //</div>
-        <p>123,456,789</p>
+        <p>443461574.25</p>
       </div>
       <div class="proportion">
         <div class="title">各工程价格占总投入比例</div>
@@ -15,7 +15,7 @@
           <p class="select"><img src="../../assets/select_icon.png" alt="" /> 筛选</p>
         </div>
         <div class="filter-wrap">
-          <a-select default-value="lucy">
+          <!-- <a-select default-value="lucy">
             <a-select-option value="jack">
               Jack
             </a-select-option>
@@ -28,7 +28,7 @@
             <a-select-option value="Yiminghe">
               yiminghe
             </a-select-option>
-          </a-select>
+          </a-select> -->
           <a-button type="primary">
             搜索
           </a-button>
@@ -68,17 +68,8 @@
         </div>
         <div class="filter-wrap">
           <a-select default-value="lucy">
-            <a-select-option value="jack">
-              Jack
-            </a-select-option>
-            <a-select-option value="lucy">
-              Lucy
-            </a-select-option>
-            <a-select-option value="disabled" disabled>
-              Disabled
-            </a-select-option>
-            <a-select-option value="Yiminghe">
-              yiminghe
+            <a-select-option :value="item.id" v-for="item in selectList" :key="item.id">
+              {{ item.projectName }}
             </a-select-option>
           </a-select>
           <a-button type="primary">
@@ -99,9 +90,39 @@
 
       <div class="proportion">
         <div class="title">工程相关信息</div>
-        <a-table :columns="columns" :data-source="data">
-          <a slot="name" slot-scope="text">{{ text }}</a>
-        </a-table>
+        <!-- <a-descriptions bordered title="Custom Size" :size="size">
+          <a-descriptions-item label="Product">
+            Cloud Database
+          </a-descriptions-item>
+          <a-descriptions-item label="Billing">
+            Prepaid
+          </a-descriptions-item>
+          <a-descriptions-item label="Time">
+            18:00:00
+          </a-descriptions-item>
+          <a-descriptions-item label="Amount">
+            $80.00
+          </a-descriptions-item>
+          <a-descriptions-item label="Discount">
+            $20.00
+          </a-descriptions-item>
+          <a-descriptions-item label="Official">
+            $60.00
+          </a-descriptions-item>
+          <a-descriptions-item label="Config Info">
+            Data disk type: MongoDB
+            <br />
+            Database version: 3.4
+            <br />
+            Package: dds.mongo.mid
+            <br />
+            Storage space: 10 GB
+            <br />
+            Replication factor: 3
+            <br />
+            Region: East China 1<br />
+          </a-descriptions-item>
+        </a-descriptions> -->
       </div>
     </div>
   </div>
@@ -109,115 +130,130 @@
 
 <script>
 import * as echarts from 'echarts'
+import { getProjectList, getStatisticalData } from '@/api/dashboard'
 
 export default {
   name: 'Analysis',
 
   data() {
     return {
-      indexStyle: 1,
-      columns: [
-        {
-          title: 'Name',
-          dataIndex: 'name',
-          key: 'name',
-          scopedSlots: { customRender: 'name' }
-        },
-        {
-          title: 'Age',
-          dataIndex: 'age',
-          key: 'age',
-          width: 80
-        }
-      ],
-      data: [
-        {
-          key: '1',
-          name: 'John Brown',
-          age: 32,
-          address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
-     
-        },
-        {
-          key: '2',
-          name: 'Jim Green',
-          age: 42,
-          address: 'London No. 2 Lake Park, London No. 2 Lake Park',
-        },
-        {
-          key: '3',
-          name: 'Joe Black',
-          age: 32,
-          address: 'Sidney No. 1 Lake Park, Sidney No. 1 Lake Park',
-        }
-      ]
+      selectList: [], // 筛选列表
+      statisticalData: [], // 工程饼状图与工程基础设施柱状图
+      indexStyle: 1
     }
   },
 
-  created() {},
+  methods: {
+    // 初始化饼图
+    initPieEchart(data) {
+      const myChart = echarts.init(document.getElementById('pie'))
+      const pieData = []
+      data.map(item => {
+        pieData.push({ value: item.constructionCosts, name: item.projectName })
+      })
+      // 绘制图表
+      myChart.setOption({
+        tooltip: {
+          trigger: 'item'
+        },
+        legend: {
+          icon: 'circle',
+          orient: 'vertical',
+          right: 10,
+          top: 'center',
+          bottom: 20,
+          type: 'scroll',
+          textStyle: {
+            color: '#fff',
+            fontSize: 12
+          },
+          pageIconColor: '#6495ed', //翻页下一页的三角按钮颜色
+          pageIconInactiveColor: '#aaa', //翻页（即翻页到头时）
+          pageIconSize: 11, //翻页按钮大小
+          pageFormatter: ' ', //隐藏翻页的数字
+          formatter: function(name) {
+            return name.length > 5 ? name.slice(0, 5) + '...' : name
+          }
+        },
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            radius: ['30%', '50%'],
+            center: ['30%', '50%'], //这个属性调整图像的位置
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            data: pieData
+          }
+        ]
+      })
+    },
 
-  methods: {},
+    // 初始化柱状图
+    initBarEchart(data) {
+      const barChart = echarts.init(document.getElementById('bar'))
+
+      const barData = []
+      const categoryList = []
+      data.map(item => {
+        barData.push(item.baseInstallationAmount)
+        categoryList.push(item.projectName)
+      })
+
+      // 绘制图表
+      barChart.setOption({
+        tooltip: {},
+        xAxis: {
+          type: 'category',
+          data: categoryList,
+          axisLabel: {
+            interval: 0,
+            rotate: 40
+          }
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            show: false //去掉网格线
+          }
+        },
+        series: [
+          {
+            data: barData,
+            type: 'bar',
+            showBackground: true,
+            backgroundStyle: {
+              color: 'rgba(180, 180, 180, 0.2)'
+            }
+          }
+        ]
+      })
+    }
+  },
+
+  created() {
+    // 获取工程筛选下拉选择
+    getProjectList().then(res => {
+      if (res.code === 200) {
+        this.selectList = res.result
+      }
+    })
+
+    // 工程饼状图与工程基础设施柱状图
+    getStatisticalData().then(res => {
+      if (res.code === 200) {
+        this.statisticalData = res.result
+
+        this.initPieEchart(res.result)
+        this.initBarEchart(res.result)
+      }
+    })
+  },
 
   mounted() {
-    var myChart = echarts.init(document.getElementById('pie'))
-    // 绘制图表
-    myChart.setOption({
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        orient: 'vertical',
-        right: 10,
-        top: 'center',
-        bottom: 20,
-        textStyle: {
-          color: '#fff'
-        }
-      },
-      series: [
-        {
-          name: 'Access From',
-          type: 'pie',
-          radius: ['30%', '60%'],
-          center: ['30%', '50%'], //这个属性调整图像的位置
-          avoidLabelOverlap: false,
-          label: {
-            show: false,
-            position: 'center'
-          },
-          data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
-          ]
-        }
-      ]
-    })
-
-    const barChart = echarts.init(document.getElementById('bar'))
-    // 绘制图表
-    barChart.setOption({
-      xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      },
-      yAxis: {
-        type: 'value'
-      },
-      series: [
-        {
-          data: [120, 200, 150, 80, 70, 110, 130],
-          type: 'bar',
-          showBackground: true,
-          backgroundStyle: {
-            color: 'rgba(180, 180, 180, 0.2)'
-          }
-        }
-      ]
-    })
-
     // 初始化地图
     var map = initMap({
       tilt: 50,
@@ -258,7 +294,7 @@ export default {
   background-size: 100% 100%;
 
   .box-left {
-    flex: 0 0 330px;
+    flex: 0 0 500px;
     padding: 10px;
 
     .current-num {
@@ -436,7 +472,7 @@ export default {
   }
 
   .box-right {
-    flex: 0 0 330px;
+    flex: 0 0 500px;
 
     .proportion {
       padding: 10px;
