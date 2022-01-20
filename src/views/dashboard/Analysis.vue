@@ -88,24 +88,69 @@
       </div>
       <div class="map-wrap">
         <div id="map_container" class="map"></div>
-
-        <!-- <baidu-map class="map" center="北京"></baidu-map> -->
       </div>
     </div>
-    <div class="box-right"></div>
+
+    <div class="box-right">
+      <div class="proportion">
+        <div class="title">各工程基础设备数量</div>
+        <div id="bar" class="echart"></div>
+      </div>
+
+      <div class="proportion">
+        <div class="title">工程相关信息</div>
+        <a-table :columns="columns" :data-source="data">
+          <a slot="name" slot-scope="text">{{ text }}</a>
+        </a-table>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import * as echarts from 'echarts'
-import { test } from '@/api/api'
 
 export default {
   name: 'Analysis',
 
   data() {
     return {
-      indexStyle: 1
+      indexStyle: 1,
+      columns: [
+        {
+          title: 'Name',
+          dataIndex: 'name',
+          key: 'name',
+          scopedSlots: { customRender: 'name' }
+        },
+        {
+          title: 'Age',
+          dataIndex: 'age',
+          key: 'age',
+          width: 80
+        }
+      ],
+      data: [
+        {
+          key: '1',
+          name: 'John Brown',
+          age: 32,
+          address: 'New York No. 1 Lake Park, New York No. 1 Lake Park',
+     
+        },
+        {
+          key: '2',
+          name: 'Jim Green',
+          age: 42,
+          address: 'London No. 2 Lake Park, London No. 2 Lake Park',
+        },
+        {
+          key: '3',
+          name: 'Joe Black',
+          age: 32,
+          address: 'Sidney No. 1 Lake Park, Sidney No. 1 Lake Park',
+        }
+      ]
     }
   },
 
@@ -151,6 +196,28 @@ export default {
       ]
     })
 
+    const barChart = echarts.init(document.getElementById('bar'))
+    // 绘制图表
+    barChart.setOption({
+      xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          data: [120, 200, 150, 80, 70, 110, 130],
+          type: 'bar',
+          showBackground: true,
+          backgroundStyle: {
+            color: 'rgba(180, 180, 180, 0.2)'
+          }
+        }
+      ]
+    })
+
     // 初始化地图
     var map = initMap({
       tilt: 50,
@@ -171,7 +238,6 @@ export default {
     })
 
     view.startAnimation()
-    //     console.log(BMap)
 
     var lineLayer = new mapvgl.LineTripLayer({
       trailLength: 21,
@@ -180,16 +246,6 @@ export default {
     view.addLayer(lineLayer)
     const data = []
     lineLayer.setData(data)
-
-    // test()
-    //   .then(function(rs) {
-    //     return rs.text()
-    //   })
-    //   .then(function(csvstr) {
-    //     var dataSet = mapv.csv.getDataSet(csvstr)
-    //     var data = dataSet.get()
-
-    //   })
   }
 }
 </script>
@@ -380,7 +436,25 @@ export default {
   }
 
   .box-right {
-    flex: 1.5;
+    flex: 0 0 330px;
+
+    .proportion {
+      padding: 10px;
+
+      .title {
+        line-height: 30px;
+        padding-left: 30px;
+        padding-right: 23px;
+        color: #fff;
+        background: url('../../assets/title.png') left top no-repeat;
+        background-size: 100% 100%;
+      }
+
+      .echart {
+        height: 300px;
+        width: 100%;
+      }
+    }
   }
 }
 </style>

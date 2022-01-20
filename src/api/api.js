@@ -92,7 +92,6 @@ const checkRuleByCode = (params) => getAction('/sys/checkRule/checkByCode', para
 //加载我的通告信息
 const getUserNoticeInfo= (params)=>getAction("/sys/sysAnnouncementSend/getMyAnnouncementSend",params);
 const getTransitURL = url => `/sys/common/transitRESTful?url=${encodeURIComponent(url)}`
-const test = (params)=>getAction("https://mapv.baidu.com/gl/examples/static/car.csv",params);
 // 中转HTTP请求
 export const transitRESTful = {
   get: (url, parameter) => getAction(getTransitURL(url), parameter),
@@ -158,7 +157,7 @@ export {
   saveDeptRolePermission,
   queryMyDepartTreeList,
   getUserNoticeInfo,
-  getDictItemsFromCache,test
+  getDictItemsFromCache
 }
 
 
