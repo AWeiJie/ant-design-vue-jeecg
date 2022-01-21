@@ -27,3 +27,12 @@ export function getProjectInfo(params) {
     params
   })
 }
+
+// 获取地图流水经纬度
+export function getLongitudeLatitude(params) {
+  return axios({
+    url: '/assets/getLongitudeLatitude',
+    method: 'get',
+    params
+  })
+}

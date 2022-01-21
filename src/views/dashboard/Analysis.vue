@@ -35,7 +35,10 @@
         </div> -->
         <div class="img-wrap">
           <template>
-            <img src="http://47.104.223.189:8080/jeecg-boot/assetsPicture/12-1.png" :preview="0" />
+            <img
+              :src="projectInfo.currentSituationUrl.replace('localhost:8080', 'http://47.104.223.189:8080')"
+              :preview="0"
+            />
           </template>
         </div>
       </div>
@@ -67,7 +70,7 @@
           </div>
         </div>
         <div class="filter-wrap">
-          <a-select default-value="lucy" @change="handleChange">
+          <a-select v-model="projectId">
             <a-select-option :value="item.id" v-for="item in selectList" :key="item.id">
               {{ item.projectName }}
             </a-select-option>
@@ -91,7 +94,7 @@
       <div class="proportion">
         <div class="title">相关信息</div>
         <div class="table-wrap">
-          <a-descriptions bordered :column="1" size="middle">
+          <a-descriptions bordered :column="1" size="middle" v-if="projectInfo.projectName">
             <a-descriptions-item label="名称">
               {{ projectInfo.projectName }}
             </a-descriptions-item>
@@ -101,9 +104,7 @@
             <a-descriptions-item label="关键设施">
               {{ projectInfo.criticalInfrastructure }}
             </a-descriptions-item>
-            <a-descriptions-item label="建设成本">
-              {{ projectInfo.constructionCosts }}
-            </a-descriptions-item>
+            <a-descriptions-item label="建设成本"> {{ projectInfo.constructionCosts }}元 </a-descriptions-item>
             <a-descriptions-item label="设计标准">
               {{ projectInfo.designCriteria }}
             </a-descriptions-item>
@@ -114,6 +115,31 @@
               {{ projectInfo.alreadyServiceLife }}
             </a-descriptions-item>
           </a-descriptions>
+
+          <a-descriptions bordered :column="1" size="middle" v-else>
+            <a-descriptions-item label="名称">
+              岭脚岙里河整治工程
+            </a-descriptions-item>
+            <a-descriptions-item label="经纬度">
+              /
+            </a-descriptions-item>
+            <a-descriptions-item label="关键设施">
+              堤防、堰坝、桥梁、景观绿化
+            </a-descriptions-item>
+            <a-descriptions-item label="建设成本">
+              9135845元
+            </a-descriptions-item>
+            <a-descriptions-item label="设计标准">
+              防洪标准：20年一遇4级设防标准<br />
+              排涝标准：20年一遇24小时雨量24小时排出
+            </a-descriptions-item>
+            <a-descriptions-item label="预期使用寿命">
+              /
+            </a-descriptions-item>
+            <a-descriptions-item label="已使用寿命">
+              0
+            </a-descriptions-item>
+          </a-descriptions>
         </div>
       </div>
     </div>
@@ -122,7 +148,7 @@
 
 <script>
 import * as echarts from 'echarts'
-import { getProjectList, getStatisticalData, getProjectInfo } from '@/api/dashboard'
+import { getProjectList, getStatisticalData, getProjectInfo, getLongitudeLatitude } from '@/api/dashboard'
 
 export default {
   name: 'Analysis',
@@ -131,7 +157,11 @@ export default {
     return {
       selectList: [], // 筛选列表
       statisticalData: [], // 工程饼状图与工程基础设施柱状图
-      projectInfo: {}, // 工程信息
+      projectInfo: {
+        currentSituationUrl: 'http://47.104.223.189:8080/jeecg-boot/assetsPicture/12-1.png'
+      }, // 工程信息
+      markerList: [], // 所有工程坐标
+      lineLayerList: [], // 地图流水坐标
       projectId: null,
       invest: 443461574.25
     }
@@ -248,6 +278,74 @@ export default {
       })
     },
 
+    // 初始化地图
+    initMap() {
+      const that = this
+      var map = initMap({
+        tilt: 50,
+        heading: 0,
+        center: [121.427443055555, 29.2926191666666],
+        zoom: 13,
+        style: purpleStyle
+      })
+
+      // 创建小车图标
+      // var myIcon = new BMapGL.Icon('../../assets/dam.svg', new BMapGL.Size(52, 26))
+      // 创建Marker标注，使用小车图标
+      // var pt = new BMapGL.Point(116.417, 39.909);
+      // var marker = new BMapGL.Marker(pt, {
+      //     icon: myIcon
+      // });
+      // // 将标注添加到地图
+      // map.addOverlay(marker);
+
+      // 创建点标记
+      for (let i = 0; i < this.markerList.length; i++) {
+        const item = this.markerList[i]
+        const pointList = item.latitudeAndLongitude.split(',')
+        const point = new BMapGL.Point(pointList[0], pointList[1])
+        const markerObj = new BMapGL.Marker(point)
+
+        // 创建文本标注对象
+        const labelopts = {
+          position: point, // 指定文本标注所在的地理位置
+          offset: new BMapGL.Size(-5, 10) // 设置文本偏移量
+        }
+        const label = new BMapGL.Label(item.projectName, labelopts)
+        label.setStyle({
+          color: '#fff',
+          fontSize: '14px',
+          backgroundColor: '0.05',
+          backgroundColor: '#84C1FF',
+          border: '0',
+          fontWeight: 'bold'
+        })
+        map.addOverlay(label)
+
+        // 点标记添加点击事件
+        markerObj.addEventListener('click', function() {
+          console.log(item)
+          that.projectId = item.id
+          that.feactProjectInfo()
+        })
+        // 在地图上添加点标记
+        map.addOverlay(markerObj)
+      }
+
+      var view = new mapvgl.View({
+        map: map
+      })
+
+      view.startAnimation()
+
+      var lineLayer = new mapvgl.LineTripLayer({
+        trailLength: 21,
+        color: 'rgb(0, 255, 255)'
+      })
+      view.addLayer(lineLayer)
+      lineLayer.setData(this.lineLayerList)
+    },
+
     // 获取工程详情
     feactProjectInfo() {
       getProjectInfo({
@@ -258,11 +356,6 @@ export default {
         }
       })
     },
-
-    // 切换工程
-    handleChange(id) {
-      this.projectId = id
-    }
   },
 
   created() {
@@ -270,6 +363,7 @@ export default {
     getProjectList().then(res => {
       if (res.code === 200) {
         this.selectList = res.result
+        this.markerList = res.result
       }
     })
 
@@ -282,49 +376,33 @@ export default {
         this.initBarEchart(res.result)
       }
     })
+
+    getLongitudeLatitude().then(res => {
+      // 按照不同河流切割数据
+      const obj = {}
+      res.result.map(item => {
+        const nameList = Object.keys(obj)
+        if (!nameList.includes(item.name)) {
+          obj[item.name] = []
+        }
+        obj[item.name].push(item.latitudeAndLongitude.split(',').map(i => i * 1))
+      })
+
+      // 组成地图所需格式
+      for (let key in obj) {
+        this.lineLayerList.push({
+          geometry: {
+            type: 'LineString',
+            coordinates: obj[key]
+          }
+        })
+      }
+
+      this.initMap()
+    })
   },
 
-  mounted() {
-    // 初始化地图
-    var map = initMap({
-      tilt: 50,
-      heading: 0,
-      center: [108.706808, 34.374272],
-      zoom: 13,
-      style: purpleStyle
-    })
-
-
-// 创建小车图标
-var myIcon = new BMapGL.Icon("../../assets/dam.svg", new BMapGL.Size(52, 26));
-// 创建Marker标注，使用小车图标
-// var pt = new BMapGL.Point(116.417, 39.909);
-// var marker = new BMapGL.Marker(pt, {
-//     icon: myIcon
-// });
-// // 将标注添加到地图
-// map.addOverlay(marker);
-
-    // 创建点标记
-    var marker1 = new BMapGL.Marker(new BMapGL.Point(108.706808, 34.374272),{icon: myIcon})
-
-    // 在地图上添加点标记
-    map.addOverlay(marker1)
-
-    var view = new mapvgl.View({
-      map: map
-    })
-
-    view.startAnimation()
-
-    var lineLayer = new mapvgl.LineTripLayer({
-      trailLength: 21,
-      color: 'rgb(0, 255, 255)'
-    })
-    view.addLayer(lineLayer)
-    const data = []
-    lineLayer.setData(data)
-  }
+  mounted() {}
 }
 </script>
 
@@ -407,7 +485,7 @@ var myIcon = new BMapGL.Icon("../../assets/dam.svg", new BMapGL.Size(52, 26));
 
       .img-wrap {
         width: 100%;
-        height: 255px;
+        // height: 255px;
         overflow: hidden;
         margin-top: 10px;
 
@@ -554,6 +632,7 @@ var myIcon = new BMapGL.Icon("../../assets/dam.svg", new BMapGL.Size(52, 26));
 
           .ant-descriptions-item-content {
             color: #fff;
+            word-break: break-all;
           }
         }
       }
