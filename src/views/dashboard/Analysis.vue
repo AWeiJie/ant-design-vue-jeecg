@@ -54,7 +54,7 @@
             width="410"
             height="98"
             scrolling="no"
-            src="//tianqi.2345.com/plugin/widget/index.htm?s=2&z=3&t=1&v=0&d=2&bd=0&k=&f=ffffff&ltf=009944&htf=cc0000&q=1&e=1&a=1&c=54511&w=410&h=98&align=center"
+            src="//tianqi.2345.com/plugin/widget/index.htm?s=1&z=1&t=1&v=0&d=2&bd=0&k=&f=ffffff&ltf=009944&htf=cc0000&q=1&e=1&a=0&c=60391&w=410&h=98&align=center"
           ></iframe>
           <!-- <div class="data">
             <p class="time" id="time">00:00:00</p>
@@ -525,15 +525,16 @@ export default {
       position: relative;
       top: 0;
       left: 0;
-      background: url(../../assets/title_border.png) bottom center no-repeat;
-      background-size: contain;
+      // background: url(../../assets/title_border.png) bottom center no-repeat;
+      // background-size: contain;
       display: flex;
       justify-content: center;
       align-items: center;
       color: #cdddf7;
-      font-size: 12px;
+      font-size: 20px;
       font-weight: 900;
       letter-spacing: 5px;
+      border-bottom: 1px solid #0e94ea;
     }
 
     .other-wrap {
