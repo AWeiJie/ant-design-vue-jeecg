@@ -93,10 +93,10 @@
         // 统计图类型
         tabStatus:"bar",
         url: {
-          getYearCountInfo: "/mock/api/report/getYearCountInfo",
-          getMonthCountInfo:"/mock/api/report/getMonthCountInfo",
-          getCntrNoCountInfo:"/mock/api/report/getCntrNoCountInfo",
-          getCabinetCountInfo:"/mock/api/report/getCabinetCountInfo",
+          // getYearCountInfo: "/mock/api/report/getYearCountInfo",
+          // getMonthCountInfo:"/mock/api/report/getMonthCountInfo",
+          // getCntrNoCountInfo:"/mock/api/report/getCntrNoCountInfo",
+          // getCabinetCountInfo:"/mock/api/report/getCabinetCountInfo",
         },
       }
     },

@@ -417,12 +417,12 @@ export default {
 <style lang="less" scoped>
 .analysis-view {
   display: flex;
-  height: calc(100vh - 130px);
+  // height: calc(100vh - 130px);
   min-width: 1280px;
   background: url('../../assets/analysis_bg.png') left top no-repeat;
   background-size: 100% 100%;
-  overflow: hidden;
-  overflow-y: auto;
+  // overflow: hidden;
+  // overflow-y: auto;
 
   .box-left {
     width: 28%;
