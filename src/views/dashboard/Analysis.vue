@@ -224,7 +224,8 @@ export default {
         series: [
           {
             type: 'pie',
-            radius: ['30%', '50%'],
+            radius: '50%',
+            // radius: ['30%', '100%'],
             center: ['30%', '50%'], //这个属性调整图像的位置
             avoidLabelOverlap: false,
             label: {

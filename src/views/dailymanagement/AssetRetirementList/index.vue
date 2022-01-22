@@ -1,6 +1,5 @@
 <template>
   <a-card :bordered="false">
-    asdas
     <!-- 查询区域 -->
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @keyup.enter.native="searchQuery">
@@ -97,6 +96,9 @@
             <a-menu slot="overlay">
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
+              </a-menu-item>
+               <a-menu-item>
+                <a >报废</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
@@ -201,6 +203,20 @@
             scopedSlots: { customRender: 'action' }
           }
         ],
+        dataSource: [
+        {
+          assetRetirementA: '11',
+          assetRetirementB: '11',
+          assetRetirementC: '11',
+          assetRetirementD: '11',
+          assetRetirementE: '11',
+          assetRetirementF: '11',
+          assetRetirementG: '11',
+          assetRetirementH: '11',
+          assetRetirementK: '11',
+          assetRetirementU: '11'
+        }
+      ],
         url: {
           list: "/com/assetRetirement/list",
           delete: "/com/assetRetirement/delete",
@@ -211,6 +227,7 @@
         },
         dictOptions:{},
         superFieldList:[],
+        disableMixinCreated:true
       }
     },
     created() {
