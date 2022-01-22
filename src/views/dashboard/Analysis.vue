@@ -5,7 +5,7 @@
         <div class="title">// 工程建设资金总投入 //</div>
         <p>{{ invest }}</p>
       </div>
-      <div class="proportion">
+      <div class="proportion echart-wrap">
         <div class="title">各工程价格占总投入比例</div>
         <div id="pie" class="echart"></div>
       </div>
@@ -48,7 +48,15 @@
       <div class="title">中心城区河道水利基础设施资产管理决策支持数据库</div>
       <div class="other-wrap">
         <div class="weather-box">
-          <div class="data">
+          <iframe
+            allowtransparency="true"
+            frameborder="0"
+            width="410"
+            height="98"
+            scrolling="no"
+            src="//tianqi.2345.com/plugin/widget/index.htm?s=2&z=3&t=1&v=0&d=2&bd=0&k=&f=ffffff&ltf=009944&htf=cc0000&q=1&e=1&a=1&c=54511&w=410&h=98&align=center"
+          ></iframe>
+          <!-- <div class="data">
             <p class="time" id="time">00:00:00</p>
             <p id="date">
               <span>2022/1/19</span>
@@ -67,7 +75,7 @@
               <p>16-22℃</p>
               <p>深圳市南山区</p>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="filter-wrap">
           <a-select v-model="projectId">
@@ -94,7 +102,7 @@
       <div class="proportion">
         <div class="title">相关信息</div>
         <div class="table-wrap">
-          <a-descriptions bordered :column="1" size="middle" v-if="projectInfo.projectName">
+          <a-descriptions bordered :column="1" v-if="projectInfo.projectName">
             <a-descriptions-item label="名称">
               {{ projectInfo.projectName }}
             </a-descriptions-item>
@@ -116,7 +124,7 @@
             </a-descriptions-item>
           </a-descriptions>
 
-          <a-descriptions bordered :column="1" size="middle" v-else>
+          <a-descriptions bordered :column="1" v-else>
             <a-descriptions-item label="名称">
               岭脚岙里河整治工程
             </a-descriptions-item>
@@ -158,7 +166,7 @@ export default {
       selectList: [], // 筛选列表
       statisticalData: [], // 工程饼状图与工程基础设施柱状图
       projectInfo: {
-        currentSituationUrl: 'http://47.104.223.189:8080/jeecg-boot/assetsPicture/12-1.png'
+        currentSituationUrl: 'http://47.104.223.189:8080/jeecg-boot/assetsPicture/mian.png'
       }, // 工程信息
       markerList: [], // 所有工程坐标
       lineLayerList: [], // 地图流水坐标
@@ -355,7 +363,7 @@ export default {
           this.projectInfo = res.result
         }
       })
-    },
+    }
   },
 
   created() {
@@ -409,14 +417,17 @@ export default {
 <style lang="less" scoped>
 .analysis-view {
   display: flex;
-  min-height: calc(100vh - 111px);
+  height: calc(100vh - 130px);
   min-width: 1280px;
   background: url('../../assets/analysis_bg.png') left top no-repeat;
   background-size: 100% 100%;
+  overflow: hidden;
+  overflow-y: auto;
 
   .box-left {
-    flex: 0 0 400px;
-    padding: 10px;
+    width: 28%;
+    background: url(../../assets/line_left.png) top right repeat-y;
+    padding: 10px 20px 10px 10px;
 
     .current-num {
       text-align: center;
@@ -425,7 +436,7 @@ export default {
       font-size: 0.46rem;
       background: url('../../assets/num_bg.png') left top no-repeat;
       background-size: 100% 100%;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
 
       .title {
         color: #0e94ea;
@@ -435,6 +446,18 @@ export default {
     }
 
     .proportion {
+      &.echart-wrap {
+        height: 48%;
+        min-height: 420px;
+
+        .echart {
+          height: calc(100% - 40px);
+          min-height: 380px;
+          width: 100%;
+          margin: 10px 0;
+        }
+      }
+
       .title {
         line-height: 30px;
         padding-left: 30px;
@@ -457,11 +480,6 @@ export default {
             vertical-align: middle;
           }
         }
-      }
-
-      .echart {
-        height: 300px;
-        width: 100%;
       }
 
       .filter-wrap {
@@ -488,6 +506,7 @@ export default {
         // height: 255px;
         overflow: hidden;
         margin-top: 10px;
+        padding-bottom: 10px;
 
         img {
           width: 100%;
@@ -497,9 +516,7 @@ export default {
   }
 
   .box-center {
-    flex: 2;
-    border-left: 1px solid #136aa7;
-    border-right: 1px solid #136aa7;
+    width: 44%;
 
     .title {
       width: 100%;
@@ -508,25 +525,29 @@ export default {
       top: 0;
       left: 0;
       background: url(../../assets/title_border.png) bottom center no-repeat;
+      background-size: contain;
       display: flex;
       justify-content: center;
       align-items: center;
-
       color: #cdddf7;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 900;
       letter-spacing: 5px;
     }
 
     .other-wrap {
+      width: 100%;
+      height: 15.3%;
       display: flex;
+      flex-flow: row nowrap;
+      justify-content: center;
+      align-items: center;
       padding: 0 20px;
-      margin: 30px 0;
+      margin: 10px 0;
 
       .weather-box {
         display: flex;
-        flex: 1.5;
-        font-size: 12px;
+        flex: 0 0 410px;
         color: #fff;
         padding: 10px 0;
         border: 1px solid #0e94ea;
@@ -578,18 +599,20 @@ export default {
         }
 
         .ant-btn {
-          margin-top: 10px;
+          margin-top: 20px;
           float: right;
+          width: 100%;
         }
       }
     }
 
     .map-wrap {
-      height: 500px;
+      height: 75.2%;
       padding: 10px;
+      box-sizing: border-box;
 
       .map {
-        height: 500px;
+        height: 100%;
       }
 
       /deep/.anchorBL {
@@ -599,10 +622,18 @@ export default {
   }
 
   .box-right {
-    flex: 0 0 400px;
+    // flex: 0 0 400px;
+    width: 28%;
+    padding: 10px;
+    background: url(../../assets/line_left.png) top left repeat-y;
 
     .proportion {
       padding: 10px;
+      height: 50%;
+
+      &:last-child {
+        margin-top: 20px;
+      }
 
       .title {
         line-height: 30px;
@@ -614,13 +645,12 @@ export default {
       }
 
       .echart {
-        height: 400px;
+        height: 100%;
         width: 100%;
       }
 
       .table-wrap {
         padding: 10px;
-        width: 400px;
         box-sizing: border-box;
 
         /deep/.ant-descriptions {
