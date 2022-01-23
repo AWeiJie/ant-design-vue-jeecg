@@ -9,6 +9,7 @@
     @ok="handleOk"
     @cancel="handleCancel"
     destroyOnClose
+    :okText="okText"
   >
 
     <slot></slot>
@@ -70,6 +71,10 @@ export default {
       okClose: {
         type: Boolean,
         default: true
+      },
+      okText: {
+        type: String,
+        default: '确定'
       },
     },
     data() {

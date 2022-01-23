@@ -5,13 +5,13 @@
       <a-form layout="inline" @keyup.enter.native="searchQuery">
         <a-row :gutter="24">
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="资产编号">
-              <a-input placeholder="请输入资产编号" v-model="queryParam.assetRetirementA"></a-input>
+            <a-form-item label="工程编号">
+              <a-input placeholder="请输入工程编号" v-model="queryParam.projectId"></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
-            <a-form-item label="资产名称">
-              <a-input placeholder="请输入资产名称" v-model="queryParam.assetRetirementB"></a-input>
+            <a-form-item label="工程名称">
+              <a-input placeholder="请输入工程名称" v-model="queryParam.projectName"></a-input>
             </a-form-item>
           </a-col>
           <a-col :xl="6" :lg="7" :md="8" :sm="24">
@@ -32,7 +32,7 @@
     <!-- 操作按钮区域 -->
     <div class="table-operator">
       <a-button @click="handleAdd" type="primary" icon="plus">新增</a-button>
-      <a-button type="primary" icon="download" @click="handleExportXls('资产报废')">导出</a-button>
+      <a-button type="primary" icon="download" @click="handleExportXls('资产评估')">导出</a-button>
       <a-upload name="file" :showUploadList="false" :multiple="false" :headers="tokenHeader" :action="importExcelUrl" @change="handleImportExcel">
         <a-button type="primary" icon="import">导入</a-button>
       </a-upload>
@@ -94,11 +94,11 @@
           <a-dropdown>
             <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
             <a-menu slot="overlay">
+               <a-menu-item>
+                <a @click="showAluationForm">重新估值</a>
+              </a-menu-item>
               <a-menu-item>
                 <a @click="handleDetail(record)">详情</a>
-              </a-menu-item>
-               <a-menu-item>
-                <a >报废</a>
               </a-menu-item>
               <a-menu-item>
                 <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
@@ -112,7 +112,10 @@
       </a-table>
     </div>
 
-    <asset-retirement-modal ref="modalForm" @ok="modalFormOk"></asset-retirement-modal>
+    <assets-assessment-modal ref="modalForm" @ok="modalFormOk"></assets-assessment-modal>
+
+        <valuation-modal ref="aluationForm" @ok="modalFormOk"></valuation-modal>
+
   </a-card>
 </template>
 
@@ -121,68 +124,79 @@
   import '@/assets/less/TableExpand.less'
   import { mixinDevice } from '@/utils/mixin'
   import { JeecgListMixin } from '@/mixins/JeecgListMixin'
-  import AssetRetirementModal from './AssetRetirementModal'
+  import AssetsAssessmentModal from './AssetsAssessmentModal'
+  import ValuationModal from './ValuationModa'
 
   export default {
-    name: 'AssetRetirementList',
+    name: 'AssetsAssessmentList',
     mixins:[JeecgListMixin, mixinDevice],
     components: {
-      AssetRetirementModal
+      AssetsAssessmentModal,
+      ValuationModal
     },
     data () {
       return {
-        description: '资产报废管理页面',
+        description: '资产评估管理页面',
         // 表头
         columns: [
           {
-            title:'资产编号',
+            title: '#',
+            dataIndex: '',
+            key:'rowIndex',
+            width:60,
             align:"center",
-            dataIndex: 'assetRetirementA'
+            customRender:function (t,r,index) {
+              return parseInt(index)+1;
+            }
           },
           {
-            title:'资产名称',
+            title:'工程编号',
             align:"center",
-            dataIndex: 'assetRetirementB'
+            sorter: true,
+            dataIndex: 'projectId'
           },
           {
-            title:'使用情况',
+            title:'工程名称',
             align:"center",
-            dataIndex: 'assetRetirementC'
+            dataIndex: 'projectName'
           },
           {
-            title:'资产所在地点',
+            title:'工程建设总成本',
             align:"center",
-            dataIndex: 'assetRetirementD'
+            dataIndex: 'constructionCosts'
           },
           {
-            title:'管理单位',
+            title:'评估基准日',
             align:"center",
-            dataIndex: 'assetRetirementE'
+            dataIndex: 'assessmentDay',
+            customRender:function (text) {
+              return !text?"":(text.length>10?text.substr(0,10):text)
+            }
           },
           {
-            title:'报废原因',
+            title:'成新率',
             align:"center",
-            dataIndex: 'assetRetirementF'
+            dataIndex: 'newRate'
           },
           {
-            title:'技术鉴定书',
+            title:'水工建筑物评估',
             align:"center",
-            dataIndex: 'assetRetirementG'
+            dataIndex: 'waterAssessment'
           },
           {
-            title:'报废审批单',
+            title:'机器设备评估',
             align:"center",
-            dataIndex: 'assetRetirementH'
+            dataIndex: 'machineAssessment'
           },
           {
-            title:'报废时间',
+            title:'土地资产价值',
             align:"center",
-            dataIndex: 'assetRetirementK'
+            dataIndex: 'landAssessment'
           },
           {
-            title:'报废申请人',
+            title:'整体资产评估值',
             align:"center",
-            dataIndex: 'assetRetirementU'
+            dataIndex: 'allAssessment'
           },
           {
             title: '操作',
@@ -193,31 +207,16 @@
             scopedSlots: { customRender: 'action' }
           }
         ],
-        dataSource: [
-        {
-          assetRetirementA: '11',
-          assetRetirementB: '11',
-          assetRetirementC: '11',
-          assetRetirementD: '11',
-          assetRetirementE: '11',
-          assetRetirementF: '11',
-          assetRetirementG: '11',
-          assetRetirementH: '11',
-          assetRetirementK: '11',
-          assetRetirementU: '11'
-        }
-      ],
         url: {
-          list: "/com/assetRetirement/list",
-          delete: "/com/assetRetirement/delete",
-          deleteBatch: "/com/assetRetirement/deleteBatch",
-          exportXlsUrl: "/com/assetRetirement/exportXls",
-          importExcelUrl: "com/assetRetirement/importExcel",
+          list: "/assets/list",
+          delete: "/test/assetsAssessment/delete",
+          deleteBatch: "/test/assetsAssessment/deleteBatch",
+          exportXlsUrl: "/test/assetsAssessment/exportXls",
+          importExcelUrl: "test/assetsAssessment/importExcel",
           
         },
         dictOptions:{},
         superFieldList:[],
-        disableMixinCreated:true
       }
     },
     created() {
@@ -233,17 +232,20 @@
       },
       getSuperFieldList(){
         let fieldList=[];
-        fieldList.push({type:'string',value:'assetRetirementA',text:'资产编号',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementB',text:'资产名称',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementC',text:'使用情况',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementD',text:'资产所在地点',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementE',text:'管理单位',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementF',text:'报废原因',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementG',text:'技术鉴定书',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementH',text:'报废审批单',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementK',text:'报废时间',dictCode:''})
-        fieldList.push({type:'string',value:'assetRetirementU',text:'报废申请人',dictCode:''})
+        fieldList.push({type:'int',value:'projectId',text:'工程编号',dictCode:''})
+        fieldList.push({type:'string',value:'projectName',text:'工程名称',dictCode:''})
+        fieldList.push({type:'string',value:'constructionCosts',text:'工程建设总成本',dictCode:''})
+        fieldList.push({type:'date',value:'assessmentDay',text:'评估基准日'})
+        fieldList.push({type:'string',value:'newRate',text:'成新率',dictCode:''})
+        fieldList.push({type:'string',value:'waterAssessment',text:'水工建筑物评估',dictCode:''})
+        fieldList.push({type:'string',value:'machineAssessment',text:'机器设备评估',dictCode:''})
+        fieldList.push({type:'string',value:'landAssessment',text:'土地资产价值',dictCode:''})
+        fieldList.push({type:'string',value:'allAssessment',text:'整体资产评估值',dictCode:''})
         this.superFieldList = fieldList
+      },
+
+      showAluationForm(){
+        this.$refs.aluationForm.add()
       }
     }
   }
