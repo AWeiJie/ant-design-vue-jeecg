@@ -123,7 +123,58 @@
     <a-row>
       <a-col :span="24">
         <a-card :loading="loading" :bordered="false" title="本月资产维保计划" :style="{ marginTop: '24px' }">
-          <a-row>
+          <a-table
+            ref="table"
+            size="middle"
+            :scroll="{ x: true }"
+            bordered
+            rowKey="id"
+            :columns="columns"
+            :dataSource="dataSource"
+            :pagination="ipagination"
+            :loading="loading"
+            class="j-table-force-nowrap"
+          >
+            <!-- <template slot="htmlSlot" slot-scope="text">
+          <div v-html="text"></div>
+        </template>
+        <template slot="imgSlot" slot-scope="text">
+          <span v-if="!text" style="font-size: 12px;font-style: italic;">无图片</span>
+          <img v-else :src="getImgView(text)" height="25px" alt="" style="max-width:80px;font-size: 12px;font-style: italic;"/>
+        </template>
+        <template slot="fileSlot" slot-scope="text">
+          <span v-if="!text" style="font-size: 12px;font-style: italic;">无文件</span>
+          <a-button
+            v-else
+            :ghost="true"
+            type="primary"
+            icon="download"
+            size="small"
+            @click="downloadFile(text)">
+            下载
+          </a-button>
+        </template> -->
+
+            <span slot="action" slot-scope="text, record">
+              <a >编辑</a>
+
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
+                <a-menu slot="overlay">
+                  <a-menu-item>
+                    <a>详情</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-popconfirm title="确定删除吗?">
+                      <a>删除</a>
+                    </a-popconfirm>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
+            </span>
+          </a-table>
+          <!-- <a-row>
             <a-col :span="6">
               <head-info title="今日IP" :content="loginfo.todayIp"></head-info>
             </a-col>
@@ -149,7 +200,7 @@
               </a-spin>
             </a-col>
           </a-row>
-          <line-chart-multid :fields="visitFields" :dataSource="visitInfo"></line-chart-multid>
+          <line-chart-multid :fields="visitFields" :dataSource="visitInfo"></line-chart-multid> -->
         </a-card>
       </a-col>
     </a-row>
@@ -210,7 +261,54 @@ export default {
       loginfo: {},
       visitFields: ['ip', 'visit'],
       visitInfo: [],
-      indicator: <a-icon type="loading" style="font-size: 24px" spin />
+      indicator: <a-icon type="loading" style="font-size: 24px" spin />,
+      // 表头
+      columns: [
+        {
+          title: '月份',
+          align: 'center',
+          sorter: true,
+          dataIndex: 'projectId'
+        },
+        {
+          title: '资产编码',
+          align: 'center',
+          sorter: true,
+          dataIndex: 'projectName'
+        },
+        {
+          title: '资产名称',
+          align: 'center',
+          dataIndex: 'constructionCosts'
+        },
+        {
+          title: '资产类别',
+          align: 'center',
+          dataIndex: 'assessmentDay'
+        },
+        {
+          title: '维保项目',
+          align: 'center',
+          dataIndex: 'newRate'
+        },
+        // {
+        //   title: '操作',
+        //   dataIndex: 'action',
+        //   align: 'center',
+        //   fixed: 'right',
+        //   width: 147,
+        //   scopedSlots: { customRender: 'action' }
+        // }
+      ],
+      dataSource: [
+        {
+          projectId: '1月',
+          projectName: 'zc0030001',
+          constructionCosts: '堤防',
+          assessmentDay: '构筑物',
+          newRate: '蚁虫害防治、堤顶养护'
+        }
+      ]
     }
   },
 

@@ -100,7 +100,7 @@
       </div>
 
       <div class="proportion">
-        <div class="title">相关信息</div>
+        <div class="title">{{ projectInfo.projectName ? '相关信息' : '宁海城区河道水利资产概况' }}</div>
         <div class="table-wrap">
           <a-descriptions bordered :column="1" v-if="projectInfo.projectName">
             <a-descriptions-item label="名称">
@@ -116,36 +116,29 @@
             <a-descriptions-item label="设计标准">
               {{ projectInfo.designCriteria }}
             </a-descriptions-item>
-            <a-descriptions-item label="预期使用寿命">
+            <a-descriptions-item label="整体资产评估价值">
               {{ projectInfo.expectedServiceLife }}
             </a-descriptions-item>
-            <a-descriptions-item label="已使用寿命">
+            <a-descriptions-item label="折旧及损耗情况">
               {{ projectInfo.alreadyServiceLife }}
             </a-descriptions-item>
           </a-descriptions>
 
           <a-descriptions bordered :column="1" v-else>
-            <a-descriptions-item label="名称">
-              岭脚岙里河整治工程
+            <a-descriptions-item label="工程数量">
+              15个
             </a-descriptions-item>
-            <a-descriptions-item label="经纬度">
-              /
+            <a-descriptions-item label="已完工工程数">
+              4个
             </a-descriptions-item>
-            <a-descriptions-item label="关键设施">
-              堤防、堰坝、桥梁、景观绿化
+            <a-descriptions-item label="水工建筑资产评估总价值">
+              421714453元
             </a-descriptions-item>
-            <a-descriptions-item label="建设成本">
-              9135845元
+            <a-descriptions-item label="机器设备资产评估总价值">
+              8284003.6元
             </a-descriptions-item>
-            <a-descriptions-item label="设计标准">
-              防洪标准：20年一遇4级设防标准<br />
-              排涝标准：20年一遇24小时雨量24小时排出
-            </a-descriptions-item>
-            <a-descriptions-item label="预期使用寿命">
-              /
-            </a-descriptions-item>
-            <a-descriptions-item label="已使用寿命">
-              0
+            <a-descriptions-item label="资产评估总价值">
+              429998456.2元
             </a-descriptions-item>
           </a-descriptions>
         </div>
