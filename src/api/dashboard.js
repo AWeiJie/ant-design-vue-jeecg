@@ -36,3 +36,12 @@ export function getLongitudeLatitude(params) {
     params
   })
 }
+
+// 获取概述页面数据
+export function getSummarize(params) {
+  return axios({
+    url: '/assets/getSummarize',
+    method: 'get',
+    params
+  })
+}

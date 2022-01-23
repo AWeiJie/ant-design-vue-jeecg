@@ -2,11 +2,11 @@
   <div class="page-header-index-wide">
     <a-row :gutter="24">
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="总销售额" total="￥126,560">
+        <chart-card :loading="loading" title="资产评估总价值" :total="`￥${info.totalAssetAppraisal}`">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <div>
+          <!-- <div>
             <trend flag="up" style="margin-right: 16px;">
               <span slot="term">周同比</span>
               12%
@@ -16,27 +16,27 @@
               11%
             </trend>
           </div>
-          <template slot="footer">日均销售额<span>￥ 234.56</span></template>
+          <template slot="footer">日均销售额<span>￥ 234.56</span></template> -->
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="订单量" :total="8846 | NumberFormat">
+        <chart-card :loading="loading" title="工程建设资金总投入" :total="`￥${info.totalConstructionCosts}`">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <div>
+          <!-- <div>
             <mini-area />
           </div>
-          <template slot="footer">日订单量<span> {{ '1234' | NumberFormat }}</span></template>
+          <template slot="footer">日订单量<span> {{ '1234' | NumberFormat }}</span></template> -->
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="支付笔数" :total="6560 | NumberFormat">
+        <chart-card :loading="loading" title="各工程成新率" :total="6560 | NumberFormat">
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <div>
-            <mini-bar :height="40" />
+          <div id="bar" style="height:40px">
+            <!-- <mini-bar :height="40" :dataSource="miniBarData"/> -->
           </div>
           <template slot="footer">转化率 <span>60%</span></template>
         </chart-card>
@@ -179,6 +179,7 @@
       LineChartMultid,
       HeadInfo
     },
+
     data() {
       return {
         loading: true,
@@ -191,12 +192,43 @@
         indicator: <a-icon type="loading" style="font-size: 24px" spin />
       }
     },
+
+    computed:{
+      miniBarData(){
+        const list = []
+        if(this.info.summarizeDetails.length){
+          this.info.summarizeDetails.map(item => {
+            let rate = item.newRate
+            if(rate.indexOf('%')> -1){
+              rate = Number(rate.replace('%', ''))
+            } else {
+              rate = 0
+            }
+            list.push({
+              x: item.projectName,
+              y: rate,
+            })
+          })
+        }
+        return list
+      }
+    },
+
+   props: {
+      info: {
+        type: Object,
+        default: {}
+      }
+    },
+
+
     created() {
       setTimeout(() => {
         this.loading = !this.loading
       }, 1000)
       this.initLogInfo();
     },
+
     methods: {
       initLogInfo () {
         getLoginfo(null).then((res)=>{
