@@ -259,7 +259,7 @@
             class="j-table-force-nowrap"
             :scroll="{ x: true }"
             :columns="columns3"
-            :dataSource="dataSource"
+            :dataSource="dataSource2"
             :pagination="ipagination"
             :loading="loading"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -457,12 +457,12 @@ export default {
           dataIndex: 'maintenanceJan'
         },
         {
-          title: '维保单位通知单',
+          title: '维保通知单',
           align: 'center',
           dataIndex: 'maintenanceHt'
         },
         {
-          title: '承包单位申请表',
+          title: '承包单位申报表',
           align: 'center',
           dataIndex: 'maintenanceHt'
         },
@@ -503,6 +503,35 @@ export default {
           maintenanceDan: 1,
           maintenanceJan: 1,
           maintenanceHt: 1
+        }
+      ],
+      dataSource2: [
+        {
+          projectNub: '015000120220130001',
+          projectName: '未执行',
+          developmentOrganization: '维修',
+          managementOrganization: '老鼠洞填补',
+          maintenanceDan: '2022/1/30',
+          maintenanceJan: '.pdt',
+          maintenanceHt: '.pdt'
+        },
+        {
+          projectNub: '015000120220120001',
+          projectName: '进行中',
+          developmentOrganization: '保养',
+          managementOrganization: '日常巡检',
+          maintenanceDan: '2022/1/20',
+          maintenanceJan: '.pdt',
+          maintenanceHt: '.pdt'
+        },
+        {
+          projectNub: '015000120220110001',
+          projectName: '已完成',
+          developmentOrganization: '保养',
+          managementOrganization: '薇甘菊防治',
+          maintenanceDan: '2022/1/10',
+          maintenanceJan: '.pdt',
+          maintenanceHt: '.pdt'
         }
       ]
     }

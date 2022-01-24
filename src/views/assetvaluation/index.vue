@@ -186,7 +186,7 @@
           {
             title:'整体资产评估值',
             align:"center",
-            dataIndex: 'allAssessment'
+            dataIndex: 'allAssetAppraisal'
           },
           {
             title: '操作',

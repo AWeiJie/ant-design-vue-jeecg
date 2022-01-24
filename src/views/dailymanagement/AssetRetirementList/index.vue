@@ -195,16 +195,28 @@
         ],
         dataSource: [
         {
-          assetRetirementA: '11',
-          assetRetirementB: '11',
-          assetRetirementC: '11',
-          assetRetirementD: '11',
-          assetRetirementE: '11',
-          assetRetirementF: '11',
-          assetRetirementG: '11',
-          assetRetirementH: '11',
-          assetRetirementK: '11',
-          assetRetirementU: '11'
+          assetRetirementA: 'zc0150009',
+          assetRetirementB: '水电系统',
+          assetRetirementC: '已报废',
+          assetRetirementD: '桥头胡汶溪',
+          assetRetirementE: '桥头胡街道水利站',
+          assetRetirementF: '设备损坏，无法维修',
+          assetRetirementG: '技术鉴定书.pdf',
+          assetRetirementH: '报废审批单.pdf',
+          assetRetirementK: '2022/1/24',
+          assetRetirementU: '张三'
+        },
+        {
+          assetRetirementA: 'zc0150001',
+          assetRetirementB: '堤防',
+          assetRetirementC: '使用中',
+          assetRetirementD: '桥头胡汶溪',
+          assetRetirementE: '桥头胡街道水利站',
+          assetRetirementF: '-',
+          assetRetirementG: '-',
+          assetRetirementH: '-',
+          assetRetirementK: '-',
+          assetRetirementU: '-'
         }
       ],
         url: {

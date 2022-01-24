@@ -143,7 +143,7 @@
             class="j-table-force-nowrap"
             :scroll="{ x: true }"
             :columns="columns2"
-            :dataSource="dataSource"
+            :dataSource="dataSource2"
             :pagination="ipagination"
             :loading="loading"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -170,23 +170,22 @@
             </template>
 
             <span slot="action" slot-scope="text, record">
-              
               <a @click="handleEdit(record)">编辑</a>
 
-          <a-divider type="vertical" />
-          <a-dropdown>
-            <a class="ant-dropdown-link">更多 <a-icon type="down" /></a>
-            <a-menu slot="overlay">
-              <a-menu-item>
-                <a @click="handleDetail(record)">详情</a>
-              </a-menu-item>
-              <a-menu-item>
-                <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
-                  <a>删除</a>
-                </a-popconfirm>
-              </a-menu-item>
-            </a-menu>
-          </a-dropdown>
+              <a-divider type="vertical" />
+              <a-dropdown>
+                <a class="ant-dropdown-link">更多 <a-icon type="down"/></a>
+                <a-menu slot="overlay">
+                  <a-menu-item>
+                    <a @click="handleDetail(record)">详情</a>
+                  </a-menu-item>
+                  <a-menu-item>
+                    <a-popconfirm title="确定删除吗?" @confirm="() => handleDelete(record.id)">
+                      <a>删除</a>
+                    </a-popconfirm>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </span>
           </a-table>
         </div>
@@ -215,16 +214,32 @@ export default {
       activeKey: 1,
       dataSource: [
         {
-          outPutA: '11',
-          outPutB: '11',
-          outPutC: '11',
-          outPutD: '11',
-          outPutE: '11',
+          outPutA: '1',
+          outPutB: '1',
+          outPutC: '1',
+          outPutD: '1',
+          outPutE: '1',
           outPutF: '11',
           outPutG: '11',
           outPutH: '11',
           outPutK: '11',
           outPutQ: '11'
+        }
+      ],
+      dataSource2: [
+        {
+          outPutA: '2022/1/24',
+          outPutB: '入库',
+          outPutC: '工程建成',
+          outPutD: '张三',
+          outPutE: '李四',
+        },
+        {
+          outPutA: '2022/1/25',
+          outPutB: '出库',
+          outPutC: '维修',
+          outPutD: '张三',
+          outPutE: '李四',
         }
       ],
       // 表头
