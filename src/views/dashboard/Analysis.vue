@@ -45,7 +45,7 @@
     </div>
 
     <div class="box-center">
-      <div class="title">宁海县中心城区河道水利基础设施资产管理决策支持数据库</div>
+      <div class="title">宁海城区河道水利资产管理决策支持数据库</div>
       <div class="other-wrap">
         <div class="weather-box">
           <iframe
@@ -101,46 +101,108 @@
 
       <div class="proportion">
         <div class="title">{{ projectInfo.projectName ? '相关信息' : '宁海城区河道水利资产概况' }}</div>
-        <div class="table-wrap">
-          <a-descriptions bordered :column="1" v-if="projectInfo.projectName">
-            <a-descriptions-item label="名称">
-              {{ projectInfo.projectName }}
-            </a-descriptions-item>
-            <a-descriptions-item label="经纬度">
-              {{ projectInfo.latitudeAndLongitude }}
-            </a-descriptions-item>
-            <a-descriptions-item label="关键设施">
-              {{ projectInfo.criticalInfrastructure }}
-            </a-descriptions-item>
-            <a-descriptions-item label="建设成本"> {{ projectInfo.constructionCosts }}元 </a-descriptions-item>
-            <a-descriptions-item label="设计标准">
-              {{ projectInfo.designCriteria }}
-            </a-descriptions-item>
-            <a-descriptions-item label="整体资产评估价值">
-              {{ projectInfo.expectedServiceLife }}
-            </a-descriptions-item>
-            <a-descriptions-item label="折旧及损耗情况">
-              {{ projectInfo.alreadyServiceLife }}
-            </a-descriptions-item>
-          </a-descriptions>
-
-          <a-descriptions bordered :column="1" v-else>
-            <a-descriptions-item label="工程数量">
+        <div class="table-wrap" v-if="projectInfo.projectName">
+          <div class="item">
+            <p class="name">名称</p>
+            <div class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content">
+                  {{ projectInfo.projectName }}
+                </template>
+                {{ projectInfo.projectName }}
+              </a-popover>
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">经纬度</p>
+            <div class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content">
+                  {{ projectInfo.latitudeAndLongitude }}
+                </template>
+                {{ projectInfo.latitudeAndLongitude }}
+              </a-popover>
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">关键设施</p>
+            <div class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content">
+                  {{ projectInfo.criticalInfrastructure }}
+                </template>
+                {{ projectInfo.criticalInfrastructure }}
+              </a-popover>
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">建设成本</p>
+            <div class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content"> {{ projectInfo.constructionCosts }}元 </template>
+                {{ projectInfo.constructionCosts }}元
+              </a-popover>
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">设计标准</p>
+            <div class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content"> {{ projectInfo.designCriteria }} </template>
+                {{ projectInfo.designCriteria }}
+              </a-popover>
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">整体资产评估价值</p>
+            <div class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content"> {{ projectInfo.expectedServiceLife }} </template>
+                {{ projectInfo.expectedServiceLife }}
+              </a-popover>
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">折旧及损耗情况</p>
+            <p class="des">
+              <a-popover placement="leftBottom">
+                <template slot="content"> {{ projectInfo.alreadyServiceLife }} </template>
+                {{ projectInfo.alreadyServiceLife }}
+              </a-popover>
+            </p>
+          </div>
+        </div>
+        <div class="table-wrap" v-else>
+          <div class="item">
+            <p class="name">工程数量</p>
+            <div class="des">
               15个
-            </a-descriptions-item>
-            <a-descriptions-item label="已完工工程数">
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">已完工工程数</p>
+            <div class="des">
               4个
-            </a-descriptions-item>
-            <a-descriptions-item label="水工建筑资产评估总价值">
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">水工建筑资产评估总价值</p>
+            <div class="des">
               421714453元
-            </a-descriptions-item>
-            <a-descriptions-item label="机器设备资产评估总价值">
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">机器设备资产评估总价值</p>
+            <div class="des">
               8284003.6元
-            </a-descriptions-item>
-            <a-descriptions-item label="资产评估总价值">
+            </div>
+          </div>
+          <div class="item">
+            <p class="name">资产评估总价值</p>
+            <div class="des">
               429998456.2元
-            </a-descriptions-item>
-          </a-descriptions>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -248,7 +310,7 @@ export default {
         grid: {
           top: '5%',
           bottom: '40%',
-          left: '15%',
+          left: '15%'
         },
         xAxis: {
           type: 'category',
@@ -343,7 +405,8 @@ export default {
       view.startAnimation()
 
       var lineLayer = new mapvgl.LineTripLayer({
-        trailLength: 21,
+        step:.8,
+        trailLength: 2100000,
         color: 'rgb(0, 255, 255)'
       })
       view.addLayer(lineLayer)
@@ -413,11 +476,12 @@ export default {
 <style lang="less" scoped>
 .analysis-view {
   display: flex;
-  // height: calc(100vh - 130px);
+  min-height: calc(100vh - 125px);
   min-width: 1280px;
   background: url('../../assets/analysis_bg.png') left top no-repeat;
   background-size: 100% 100%;
-  // overflow: hidden;
+  overflow-y: hidden;
+  overflow-x: auto;
   // overflow-y: auto;
 
   .box-left {
@@ -526,7 +590,7 @@ export default {
       justify-content: center;
       align-items: center;
       color: #cdddf7;
-      font-size: 20px;
+      font-size: 23px;
       font-weight: 900;
       letter-spacing: 5px;
       border-bottom: 1px solid #0e94ea;
@@ -544,7 +608,7 @@ export default {
 
       .weather-box {
         display: flex;
-        flex: 0 0 410px;
+        flex: 0 0 370px;
         color: #fff;
         padding: 10px 0;
         border: 1px solid #0e94ea;
@@ -579,11 +643,11 @@ export default {
       }
 
       .filter-wrap {
-        flex: 1;
+        flex: 0 0 190px;
         padding-left: 30px;
 
         .ant-select {
-          width: 100%;
+          width: 190px;
 
           /deep/.ant-select-selection {
             background-color: #142537;
@@ -604,7 +668,7 @@ export default {
     }
 
     .map-wrap {
-      height: 75.2%;
+      height: 75%;
       padding: 10px;
       box-sizing: border-box;
 
@@ -647,22 +711,59 @@ export default {
       }
 
       .table-wrap {
-        padding: 10px;
-        box-sizing: border-box;
+        width: 100%;
+        border: 1px solid #fff;
+        border-radius: 4px;
+        margin-top: 20px;
 
-        /deep/.ant-descriptions {
-          .ant-descriptions-item-label {
-            background-color: #143653;
-            color: #fff;
-            width: 136px;
+        .item {
+          display: flex;
+          height: 50px;
+          line-height: 50px;
+          text-align: center;
+          min-width: 0;
+          color: #fff;
+          border-bottom: 1px solid #fff;
+
+          &:last-child {
+            border-bottom: none;
           }
 
-          .ant-descriptions-item-content {
-            color: #fff;
-            word-break: break-all;
+          .name {
+            flex: 0 0 136px;
+            border-right: 1px solid #fff;
+          }
+
+          .des {
+            flex: 1;
+            padding: 0 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
         }
       }
+
+      // .table-wrap {
+      //   padding: 10px;
+      //   box-sizing: border-box;
+
+      //   /deep/.ant-descriptions {
+      //     .ant-descriptions-item-label {
+      //       background-color: #143653;
+      //       color: #fff;
+      //       width: 136px;
+      //     }
+
+      //     .ant-descriptions-item-content {
+      //       color: #fff;
+      //       width: 200px;
+      //       overflow: hidden;
+      //       text-overflow: ellipsis;
+      //       white-space: nowrap;
+      //     }
+      //   }
+      // }
     }
   }
 }

@@ -40,5 +40,6 @@
 <style>
   #app {
     height: 100%;
+    min-width: 1700px;
   }
 </style>
