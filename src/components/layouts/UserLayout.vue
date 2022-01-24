@@ -1,7 +1,7 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
     <div class="container">
-      <div class="top">
+      <!-- <div class="top">
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
@@ -11,7 +11,7 @@
         <div class="desc">
 
         </div>
-      </div>
+      </div> -->
 
       <route-view></route-view>
 

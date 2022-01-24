@@ -246,14 +246,16 @@ export default {
       barChart.setOption({
         tooltip: {},
         grid: {
-          top: '5%'
+          top: '5%',
+          bottom: '40%',
+          left: '15%',
         },
         xAxis: {
           type: 'category',
           data: categoryList,
           axisLabel: {
             interval: 0,
-            rotate: 60
+            rotate: 70
           }
         },
         yAxis: {

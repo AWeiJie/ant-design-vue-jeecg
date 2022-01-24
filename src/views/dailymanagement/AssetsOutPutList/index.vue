@@ -291,16 +291,6 @@ export default {
       // 表头
       columns2: [
         {
-          title: '#',
-          dataIndex: '',
-          key: 'rowIndex',
-          width: 60,
-          align: 'center',
-          customRender: function(t, r, index) {
-            return parseInt(index) + 1
-          }
-        },
-        {
           title: '时间',
           align: 'center',
           dataIndex: 'outPutA'
