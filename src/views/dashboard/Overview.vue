@@ -86,7 +86,7 @@
 
     <a-card :bordered="false" :body-style="{ padding: '0' }">
       <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{ marginBottom: '24px', paddingLeft: '16px' }">
+        <a-tabs default-active-key="1" size="large" :tab-bar-style="{ marginBottom: '24px', paddingLeft: '16px' }" @change="changeTabs">
           <!-- <div class="extra-wrapper" slot="tabBarExtraContent">
             <div class="extra-item">
               <a>今日</a>
@@ -96,20 +96,22 @@
             </div>
             <a-range-picker :style="{ width: '256px' }" />
           </div> -->
-          <a-tab-pane tab="各工程资产整体评估值" key="1">
+          <a-tab-pane tab="各工程资产整体评估值" key="1" forceRender>
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :dataSource="assetAppraisalBar" height="600" />
+                <div id="bar" style="height: 600px"></div>
+                <!-- <bar :dataSource="assetAppraisalBar" height="600" /> -->
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="各工程效益排行榜" :list="rankList" />
               </a-col>
             </a-row>
           </a-tab-pane>
-          <a-tab-pane tab="各工程建设总成本" key="2">
+          <a-tab-pane tab="各工程建设总成本" key="2" forceRender>
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :dataSource="constructionCostsBar" height="700" />
+                 <div id="barother" style="height: 600px"></div>
+                <!-- <bar :dataSource="constructionCostsBar" height="700" /> -->
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="各工程效益排行榜" :list="rankList" />
@@ -218,6 +220,7 @@ import RankList from '@/components/chart/RankList'
 import Bar from '@/components/chart/Bar'
 import LineChartMultid from '@/components/chart/LineChartMultid'
 import HeadInfo from '@/components/tools/HeadInfo.vue'
+import * as echarts from 'echarts'
 
 import Trend from '@/components/Trend'
 
@@ -313,46 +316,13 @@ export default {
   },
 
   methods: {
-    // 初始化 各工程资产整体评估值 柱状图
-    initBarEchart(data) {
-      const barChart = echarts.init(document.getElementById('bar'))
-
-      const barData = []
-      const categoryList = []
-      data.map(item => {
-        barData.push(Number(item.assetAppraisal))
-        categoryList.push(item.projectName)
-      })
-
-      console.log(barChart)
-
-      // 绘制图表
-      barChart.setOption({
-        tooltip: {},
-        grid: {
-          top: '5%'
-        },
-        xAxis: {
-          type: 'category',
-          data: categoryList,
-          axisLabel: {
-            interval: 0,
-            rotate: 60
-          }
-        },
-        yAxis: {
-          type: 'value',
-          splitLine: {
-            show: false //去掉网格线
-          }
-        },
-        series: [
-          {
-            data: barData,
-            type: 'bar'
-          }
-        ]
-      })
+    changeTabs(type){
+      // console.log(type)
+      // if(type == 1) {
+      //   this.initBarEchart(this.assetAppraisalBar)
+      // } else {
+      //   this.initBarEchart(this.constructionCostsBar)
+      // }
     },
 
     tooltipPercentageShow(title, items, all = true) {
@@ -377,7 +347,56 @@ export default {
       }
       listDom += '</ul>'
       return html + listDom + '</div>'
-    }
+    },
+
+      // 初始化柱状图
+    initBarEchart(data, id) {
+      const barChart = echarts.init(document.getElementById(id))
+      const barData = []
+      const categoryList = []
+      data.map(item => {
+        barData.push(item.y)
+        categoryList.push(item.x)
+      })
+      console.log(barChart)
+
+      // 绘制图表
+      barChart.setOption({
+        tooltip: {},
+        grid: {
+          top: '5%',
+          bottom: '35%',
+          left: '10%',
+          right:'1%'
+        },
+        xAxis: {
+          type: 'category',
+          data: categoryList,
+          axisLabel: {
+            interval: 0,
+            rotate: 70
+          }
+        },
+        yAxis: {
+          type: 'value',
+          splitLine: {
+            show: true //去掉网格线
+          },
+          axisLabel:{
+            formatter: function(value){
+              return `${Number(value) / 10000}万元`
+            }
+          }
+        },
+        series: [
+          {
+            data: barData,
+            type: 'bar',
+            color:'#51a0ff'
+          }
+        ]
+      })
+    },
   },
 
   created() {
@@ -406,6 +425,9 @@ export default {
               x: item.projectName,
               y: Number(item.constructionCosts)
             })
+
+            this.initBarEchart(this.assetAppraisalBar, 'bar')
+            this.initBarEchart(this.constructionCostsBar, 'barother')
           })
 
           this.overviewInfo.summarizeDetails.reverse().map(item => {
