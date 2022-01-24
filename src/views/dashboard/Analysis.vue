@@ -45,7 +45,7 @@
     </div>
 
     <div class="box-center">
-      <div class="title">中心城区河道水利基础设施资产管理决策支持数据库</div>
+      <div class="title">宁海县中心城区河道水利基础设施资产管理决策支持数据库</div>
       <div class="other-wrap">
         <div class="weather-box">
           <iframe
@@ -95,7 +95,7 @@
 
     <div class="box-right">
       <div class="proportion">
-        <div class="title">基础设备数量</div>
+        <div class="title">基础设施数量</div>
         <div id="bar" class="echart"></div>
       </div>
 

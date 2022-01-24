@@ -166,7 +166,7 @@
             class="j-table-force-nowrap"
             :scroll="{ x: true }"
             :columns="columns2"
-            :dataSource="dataSource"
+            :dataSource="dataSource2"
             :pagination="ipagination"
             :loading="loading"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -259,7 +259,7 @@
             class="j-table-force-nowrap"
             :scroll="{ x: true }"
             :columns="columns3"
-            :dataSource="dataSource2"
+            :dataSource="dataSource3"
             :pagination="ipagination"
             :loading="loading"
             :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
@@ -464,17 +464,17 @@ export default {
         {
           title: '承包单位申报表',
           align: 'center',
-          dataIndex: 'maintenanceHt'
+          dataIndex: 'maintenanceHt1'
         },
         {
           title: '维保回执单',
           align: 'center',
-          dataIndex: 'maintenanceHt'
+          dataIndex: 'maintenanceHt2'
         },
         {
           title: '验收单',
           align: 'center',
-          dataIndex: 'maintenanceHt'
+          dataIndex: 'maintenanceHt3'
         },
         {
           title: '操作',
@@ -496,24 +496,40 @@ export default {
       superFieldList: [],
       dataSource: [
         {
-          projectNub: 11,
-          projectName: 11,
-          developmentOrganization: 11,
-          managementOrganization: 1,
-          maintenanceDan: 1,
-          maintenanceJan: 1,
-          maintenanceHt: 1
+          projectNub: 'gc015',
+          projectName: '汶溪生态小流域治理工程',
+          developmentOrganization: '宁海县水利水电勘测设计院',
+          managementOrganization: '桥头胡街道水利站',
+          maintenanceDan: '桥头胡街道某维管养护公司',
+          maintenanceJan: '某第三方监理单位',
+          maintenanceHt: '汶溪生态小流域治理工程维保合同.pdf'
         }
       ],
       dataSource2: [
+        {
+          projectNub: 'zc0150001',
+          projectName: '堤防',
+          developmentOrganization: '构筑物',
+          managementOrganization:
+            '硬底化堤顶养护（1）堤顶养护应做到平整、坚实、清洁、无杂草、无弃物。如有杂草、弃物，应进行清除。（2）堤顶养护应做到岸墙线完整、无明显缺陷，如有缺陷、损坏应进行修复。（3）养护人员在对堤顶养护时要注意对观测点、基准点的保护，如损坏应及时修复。混凝土岸墙面养护（1）混凝土岸墙面应保持原设计墙面完整、无明显缺陷、清洁、无杂树、无杂草、无明显青苔、无弃物。如有缺陷应进行修复，如有杂树杂草、青苔、弃物，应进行清除。（2）混凝土表层脱壳、剥落和机械损坏或者钢筋混凝土保护层受到侵蚀损坏时，应根据情况分别采用聚合物材料涂刷封闭、砂浆抹面等措施进行处理。（3）混凝土出现微细表面裂缝、浅层缝以及缝宽小于0.30mm可采用聚合物材料涂刷封闭。（4）伸缩缝填料老化、脱落流失，应采用柔性材料修补，或者重新埋设止水予以修复。（5）堤岸外露桩身出现损坏，应采用先除松散块后再用C30以上细石混凝土按原状修补；钢桩身应采用先除锈去渣再焊补修复。蚁鼠害防治要求堤防遭受白蚁、害兽危害时，应采用药物毒杀、诱杀和人工捕杀等方法防治。蚁穴、兽洞采用锥探及灌拌有药物的粘土浆或开挖回填等方法处理。薇甘菊防治：',
+          maintenanceDan:
+            '巡检：每日日常巡检、汛前、汛中、汛后询巡检蚁鼠害防治：每年3月、4月、5月、6月每月检查2次，其它月份每月检查1次，每月投药一次。堤身遭受蚁害时，应采用毒杀的方法防治；遭受兽畜危害时应采用诱捕、驱赶等方法防治；蚁穴、兽洞可采用灌浆或者开挖回填等方法处理。薇甘菊防治：每月两次每年进行2次，分别在5月和10月各一次。',
+          maintenanceJan: '2022/2/20',
+          maintenanceHt: '2022/2/30'
+        }
+      ],
+      dataSource3: [
         {
           projectNub: '015000120220130001',
           projectName: '未执行',
           developmentOrganization: '维修',
           managementOrganization: '老鼠洞填补',
           maintenanceDan: '2022/1/30',
-          maintenanceJan: '.pdt',
-          maintenanceHt: '.pdt'
+          maintenanceJan: '检查记录表.pdt',
+          maintenanceHt: '维保通知单.pdt',
+          maintenanceHt1: '承包单位申报表.pdt',
+          maintenanceHt2: '维保回执单.pdt',
+          maintenanceHt3: '验收单.pdt'
         },
         {
           projectNub: '015000120220120001',
@@ -521,8 +537,11 @@ export default {
           developmentOrganization: '保养',
           managementOrganization: '日常巡检',
           maintenanceDan: '2022/1/20',
-          maintenanceJan: '.pdt',
-          maintenanceHt: '.pdt'
+          maintenanceJan: '检查记录表.pdt',
+          maintenanceHt: '维保通知单.pdt',
+          maintenanceHt1: '承包单位申报表.pdt',
+          maintenanceHt2: '维保回执单.pdt',
+          maintenanceHt3: '验收单.pdt'
         },
         {
           projectNub: '015000120220110001',
@@ -530,8 +549,11 @@ export default {
           developmentOrganization: '保养',
           managementOrganization: '薇甘菊防治',
           maintenanceDan: '2022/1/10',
-          maintenanceJan: '.pdt',
-          maintenanceHt: '.pdt'
+          maintenanceJan: '检查记录表.pdt',
+          maintenanceHt: '维保通知单.pdt',
+          maintenanceHt1: '承包单位申报表.pdt',
+          maintenanceHt2: '维保回执单.pdt',
+          maintenanceHt3: '验收单.pdt'
         }
       ]
     }

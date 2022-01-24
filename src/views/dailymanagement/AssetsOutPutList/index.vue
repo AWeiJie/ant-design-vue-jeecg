@@ -214,16 +214,28 @@ export default {
       activeKey: 1,
       dataSource: [
         {
-          outPutA: '1',
-          outPutB: '1',
-          outPutC: '1',
-          outPutD: '1',
-          outPutE: '1',
-          outPutF: '11',
-          outPutG: '11',
-          outPutH: '11',
-          outPutK: '11',
-          outPutQ: '11'
+          outPutA: 'zc0030001',
+          outPutB: '堤防',
+          outPutC: '在库',
+          outPutD: '跃龙街道兴海路东侧',
+          outPutE: '2022/1/24',
+          outPutF: '-',
+          outPutG: '工程建成',
+          outPutH: '-',
+          outPutK: '张三',
+          outPutQ: '李四'
+        },
+        {
+          outPutA: 'zc0030002',
+          outPutB: '堰坝',
+          outPutC: '不在库',
+          outPutD: '跃龙街道兴海路东侧',
+          outPutE: '2022/1/24',
+          outPutF: '2022/1/25',
+          outPutG: '工程建成',
+          outPutH: '维修',
+          outPutK: '张三',
+          outPutQ: '李四'
         }
       ],
       dataSource2: [
