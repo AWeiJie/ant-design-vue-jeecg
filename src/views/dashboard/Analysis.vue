@@ -312,7 +312,7 @@ export default {
           bottom: '40%',
           left: '15%'
         },
-        color:'#FFBF00',
+        color:'#51a0ff',
         xAxis: {
           type: 'category',
           data: categoryList,

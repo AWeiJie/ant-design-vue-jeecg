@@ -35,7 +35,7 @@
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
-          <div id="bar" style="height:40px">
+          <div style="height:40px">
             <v-chart
               :forceFit="width == null"
               :height="40"
@@ -58,7 +58,11 @@
         </chart-card>
       </a-col>
       <a-col :sm="24" :md="12" :xl="6" :style="{ marginBottom: '24px' }">
-        <chart-card :loading="loading" title="完成工程占比" :total="overviewInfo.completeRate">
+        <chart-card
+          :loading="loading"
+          title="完成工程占比"
+          :total="`${Number(overviewInfo.completeRate.replace('%', '')).toFixed(1)}%`"
+        >
           <a-tooltip title="指标说明" slot="action">
             <a-icon type="info-circle-o" />
           </a-tooltip>
@@ -86,7 +90,12 @@
 
     <a-card :bordered="false" :body-style="{ padding: '0' }">
       <div class="salesCard">
-        <a-tabs default-active-key="1" size="large" :tab-bar-style="{ marginBottom: '24px', paddingLeft: '16px' }" @change="changeTabs">
+        <a-tabs
+          default-active-key="1"
+          size="large"
+          :tab-bar-style="{ marginBottom: '24px', paddingLeft: '16px' }"
+          @change="changeTabs"
+        >
           <!-- <div class="extra-wrapper" slot="tabBarExtraContent">
             <div class="extra-item">
               <a>今日</a>
@@ -110,7 +119,7 @@
           <a-tab-pane tab="各工程建设总成本" key="2" forceRender>
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                 <div id="barother" style="height: 600px"></div>
+                <div id="barother" style="height: 600px"></div>
                 <!-- <bar :dataSource="constructionCostsBar" height="700" /> -->
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
@@ -158,7 +167,7 @@
         </template> -->
 
             <span slot="action" slot-scope="text, record">
-              <a >编辑</a>
+              <a>编辑</a>
 
               <a-divider type="vertical" />
               <a-dropdown>
@@ -293,7 +302,7 @@ export default {
           title: '维保项目',
           align: 'center',
           dataIndex: 'newRate'
-        },
+        }
         // {
         //   title: '操作',
         //   dataIndex: 'action',
@@ -316,7 +325,7 @@ export default {
   },
 
   methods: {
-    changeTabs(type){
+    changeTabs(type) {
       // console.log(type)
       // if(type == 1) {
       //   this.initBarEchart(this.assetAppraisalBar)
@@ -349,7 +358,7 @@ export default {
       return html + listDom + '</div>'
     },
 
-      // 初始化柱状图
+    // 初始化柱状图
     initBarEchart(data, id) {
       const barChart = echarts.init(document.getElementById(id))
       const barData = []
@@ -358,7 +367,6 @@ export default {
         barData.push(item.y)
         categoryList.push(item.x)
       })
-      console.log(barChart)
 
       // 绘制图表
       barChart.setOption({
@@ -367,7 +375,7 @@ export default {
           top: '5%',
           bottom: '35%',
           left: '10%',
-          right:'1%'
+          right: '1%'
         },
         xAxis: {
           type: 'category',
@@ -382,8 +390,8 @@ export default {
           splitLine: {
             show: true //去掉网格线
           },
-          axisLabel:{
-            formatter: function(value){
+          axisLabel: {
+            formatter: function(value) {
               return `${Number(value) / 10000}万元`
             }
           }
@@ -392,11 +400,13 @@ export default {
           {
             data: barData,
             type: 'bar',
-            color:'#51a0ff'
+            color: '#51a0ff'
           }
         ]
       })
-    },
+
+      console.log(barChart)
+    }
   },
 
   created() {
@@ -405,6 +415,7 @@ export default {
         this.overviewInfo = res.result
         if (this.overviewInfo.summarizeDetails.length) {
           this.loading = false
+          console.log(this.overviewInfo.summarizeDetails)
 
           this.overviewInfo.summarizeDetails.map(item => {
             let rate = item.newRate
@@ -426,14 +437,17 @@ export default {
               y: Number(item.constructionCosts)
             })
 
+            //
+          })
+          setTimeout(() => {
             this.initBarEchart(this.assetAppraisalBar, 'bar')
             this.initBarEchart(this.constructionCostsBar, 'barother')
-          })
+          }, 1000)
 
           this.overviewInfo.summarizeDetails.reverse().map(item => {
             this.rankList.push({
               name: item.projectName,
-              total: item.assetAppraisal || 0
+              total: item.constructionCosts || '--'
             })
           })
         }
