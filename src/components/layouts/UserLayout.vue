@@ -1,21 +1,21 @@
 <template>
   <div id="userLayout" :class="['user-layout-wrapper', device]">
     <div class="container">
-      <!-- <div class="top">
+      <div class="top">
         <div class="header">
           <a href="/">
             <img src="~@/assets/logo.svg" class="logo" alt="logo">
-            <span class="title">Jeecg Boot</span>
+            <span class="title">宁海城区河道水利资产管理决策支持数据库</span>
           </a>
         </div>
         <div class="desc">
 
         </div>
-      </div> -->
+      </div>
 
       <route-view></route-view>
 
-      <div class="footer">
+      <!-- <div class="footer">
         <div class="links">
           <a href="http://doc.jeecg.com" target="_blank">帮助</a>
           <a href="https://github.com/zhangdaiscott/jeecg-boot" target="_blank">隐私</a>
@@ -24,7 +24,7 @@
         <div class="copyright">
 
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
