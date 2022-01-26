@@ -43,7 +43,6 @@ export default {
   padding: 0 32px 32px 72px;
 
   .list{
-    margin: 25px 0 0;
     padding: 0;
     list-style: none;
 
@@ -77,14 +76,31 @@ export default {
         }
 
         &.benefit {
-          margin-left: 30px;
+          margin-left: 62px;
         }
       }
     }
   }
 
    .name {
-     
+     margin-bottom: 0;
+    margin: 25px 0 0;
+
+    li {
+      display: inline-block;
+      font-weight: bold;
+      padding-left: 35px;
+
+        &.total,
+        &.benefit {
+          float: right;
+          padding-left: 0;
+        }
+
+        &.benefit {
+          margin-left: 30px;
+        }
+    }
    }
 }
 
