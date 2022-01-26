@@ -107,22 +107,22 @@
           </div> -->
           <a-tab-pane tab="各工程资产整体评估值" key="1" forceRender>
             <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="14" :lg="12" :md="12" :sm="24" :xs="24">
                 <div id="bar" style="height: 600px"></div>
                 <!-- <bar :dataSource="assetAppraisalBar" height="600" /> -->
               </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="10" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="各工程效益排行榜" :list="rankList" />
               </a-col>
             </a-row>
           </a-tab-pane>
           <a-tab-pane tab="各工程建设总成本" key="2" forceRender>
             <a-row>
-              <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="14" :lg="12" :md="12" :sm="24" :xs="24">
                 <div id="barother" style="height: 600px"></div>
                 <!-- <bar :dataSource="constructionCostsBar" height="700" /> -->
               </a-col>
-              <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
+              <a-col :xl="10" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="各工程效益排行榜" :list="rankList" />
               </a-col>
             </a-row>
@@ -444,10 +444,16 @@ export default {
             this.initBarEchart(this.constructionCostsBar, 'barother')
           }, 1000)
 
-          this.overviewInfo.summarizeDetails.reverse().map(item => {
+          const list = [
+            0.7196, 0.6962,0.6956,0.6805,0.6741,0.6015,0.5674,0.5139,0.5138,0.4989,0.4957,0.4424,0.4395,0.4117
+          ]
+
+          this.overviewInfo.summarizeDetails.reverse().map((item,index) => {
             this.rankList.push({
               name: item.projectName,
-              total: item.constructionCosts || '--'
+              total: item.assetAppraisal || '--',
+              // construction: item.constructionCosts || '--',
+              benefit: list[index]
             })
           })
         }
